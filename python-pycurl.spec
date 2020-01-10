@@ -2,7 +2,7 @@
 
 Name:           python-pycurl
 Version:        7.19.0
-Release:        8%{?dist}
+Release:        9%{?dist}
 Summary:        A Python interface to libcurl
 
 Group:          Development/Languages
@@ -12,12 +12,15 @@ Source0:        http://pycurl.sourceforge.net/download/pycurl-%{version}.tar.gz
 Patch0:         python-pycurl-no-static-libs.patch
 Patch1:		python-pycurl-do_curl_reset-reinitialize-handle.patch
 Patch2:		python-pycurl-do_curl_reset-refcount.patch
+Patch3:         python-pycurl-7.19.0-tls12.patch
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires:  python-devel
-BuildRequires:  curl-devel >= 7.19.0
 BuildRequires:  openssl-devel
+
+# libcurl-devel-7.19.7-43.el6 or newer is needed for CURL_SSLVERSION_TLSv1_[0-2]
+BuildRequires:  libcurl-devel >= 7.19.7-43.el6
 
 # During its initialization, PycURL checks that the actual libcurl version
 # is not lower than the one used when PycURL was built.
@@ -42,6 +45,7 @@ of features.
 %patch0 -p0
 %patch1 -p1 -b .reinitialize-handle
 %patch2 -p1
+%patch3 -p1
 chmod a-x examples/*
 
 %build
@@ -65,6 +69,9 @@ rm -rf %{buildroot}
 %{python_sitearch}/*
 
 %changelog
+* Mon Sep 07 2015 Kamil Dudka <kdudka@redhat.com> - 7.19.0-9
+- introduce SSLVERSION_TLSv1_[0-2] (#1260406)
+
 * Tue Jan 25 2011 Karel Klic <kklic@redhat.com> - 7.19.0-8
 - Revert previous change; remove patch suffix for the reset-refcount
   patch
