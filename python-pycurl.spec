@@ -2,7 +2,7 @@
 
 Name:           python-pycurl
 Version:        7.19.0
-Release:        5%{?dist}
+Release:        8%{?dist}
 Summary:        A Python interface to libcurl
 
 Group:          Development/Languages
@@ -10,6 +10,8 @@ License:        LGPLv2+ or MIT
 URL:            http://pycurl.sourceforge.net/
 Source0:        http://pycurl.sourceforge.net/download/pycurl-%{version}.tar.gz
 Patch0:         python-pycurl-no-static-libs.patch
+Patch1:		python-pycurl-do_curl_reset-reinitialize-handle.patch
+Patch2:		python-pycurl-do_curl_reset-refcount.patch
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
@@ -38,6 +40,8 @@ of features.
 %prep
 %setup0 -q -n pycurl-%{version}
 %patch0 -p0
+%patch1 -p1 -b .reinitialize-handle
+%patch2 -p1
 chmod a-x examples/*
 
 %build
@@ -61,6 +65,23 @@ rm -rf %{buildroot}
 %{python_sitearch}/*
 
 %changelog
+* Tue Jan 25 2011 Karel Klic <kklic@redhat.com> - 7.19.0-8
+- Revert previous change; remove patch suffix for the reset-refcount
+  patch
+  Related: rhbz#624559
+
+* Tue Jan 25 2011 Karel Klic <kklic@redhat.com> - 7.19.0-7
+- Exclude patch files from tests directory
+  Related: rhbz#624559
+
+* Tue Jan 25 2011 Karel Klic <kklic@redhat.com> - 7.19.0-6
+- Added do_curl_reset-refcount.patch: Fixed reference counting of
+  Py_None in reset function
+  Resolves: rhbz#624559
+- Added do_curl_reset-reinitialize-handle.patch: Proper
+  re-initialization of internal settings in reset function
+  Resolves: rhbz#565654
+
 * Thu Feb 25 2010 Karel Klic <kklic@redhat.com> - 7.19.0-5
 - Package COPYING2 file
 - Added MIT as a package license
