@@ -2,7 +2,7 @@
 
 Name:           python-pycurl
 Version:        7.19.0
-Release:        15.1%{?dist}
+Release:        17%{?dist}
 Summary:        A Python interface to libcurl
 
 Group:          Development/Languages
@@ -77,6 +77,12 @@ rm -rf %{buildroot}%{_datadir}/doc/pycurl
 %{python_sitearch}/*
 
 %changelog
+* Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 7.19.0-17
+- Mass rebuild 2014-01-24
+
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 7.19.0-16
+- Mass rebuild 2013-12-27
+
 * Tue Apr 09 2013 Kamil Dudka <kdudka@redhat.com> - 7.19.0-15.1
 - add the GLOBAL_ACK_EINTR constant to the list of exported symbols (#920589)
 
