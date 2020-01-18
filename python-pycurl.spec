@@ -2,7 +2,7 @@
 
 Name:           python-pycurl
 Version:        7.19.0
-Release:        17%{?dist}
+Release:        19%{?dist}
 Summary:        A Python interface to libcurl
 
 Group:          Development/Languages
@@ -24,10 +24,16 @@ Patch103:       0103-pycurl.c-allow-to-return-1-from-write-callback.patch
 Patch104:       0104-test_write_abort.py-test-returning-1-from-write-call.patch
 Patch105:       0105-add-the-GLOBAL_ACK_EINTR-constant-to-the-list-of-exp.patch
 
+# RHEL patches
+Patch201:       0201-Keep-a-reference-to-the-object-used-for-CURLOPT_POST.patch
+Patch202:       0202-Add-libcurl-7.34.0-sslversion-options.patch
+
 Requires:       keyutils-libs
 BuildRequires:  python-devel
-BuildRequires:  curl-devel >= 7.19.0
 BuildRequires:  openssl-devel
+
+# curl-7.29.0-16 or newer is needed for CURL_SSLVERSION_TLSv1_[0-2]
+BuildRequires:  libcurl-devel >= 7.29.0-16
 
 # During its initialization, PycURL checks that the actual libcurl version
 # is not lower than the one used when PycURL was built.
@@ -59,6 +65,8 @@ of features.
 %patch103 -p1
 %patch104 -p1
 %patch105 -p1
+%patch201 -p1
+%patch202 -p1
 chmod a-x examples/*
 
 %build
@@ -77,6 +85,12 @@ rm -rf %{buildroot}%{_datadir}/doc/pycurl
 %{python_sitearch}/*
 
 %changelog
+* Mon Sep 07 2015 Kamil Dudka <kdudka@redhat.com> - 7.19.0-19
+- introduce SSLVERSION_TLSv1_[0-2] (#1260407)
+
+* Wed Oct 15 2014 Kamil Dudka <kdudka@redhat.com> - 7.19.0-18
+- fix a use-after-free bug in handling pycurl.POSTFIELDS (#1153321)
+
 * Fri Jan 24 2014 Daniel Mach <dmach@redhat.com> - 7.19.0-17
 - Mass rebuild 2014-01-24
 
